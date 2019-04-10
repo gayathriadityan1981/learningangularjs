@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta chrset="UTF 8">
+	
+</head>
+<body ng-app="myapp">
+<h1> Ng model</h1>
+<script src="https://code.angularjs.org/1.6.9/angular.js"></script>
+<div  ng-controller="myCtrller">
+    <input type="button" value="Show Button" ng-click="showHide('show')"/>
+    <input type="button" value="Hide Button" ng-click="showHide('hide')"/>
+<div ng-show="showval">Show div</div>
+<div ng-hide="hideval">Hide div</div>
+</div>
+<script>
+var app=angular.module("myapp",[]);
+app.controller("myCtrller",function($scope){
+    $scope.showval=true;
+    $scope.hideval=false;
+    $scope.showHide=function(param){
+        if(param=='show'){
+            $scope.showval=true;
+            $scope.hideval=true;
+        }
+       else if(param=='hide'){
+            $scope.showval=false;
+            $scope.hideval=false;
+        }
+        else{
+            $scope.showval=true;
+            $scope.hideval=false;
+        }
+
+    }
+
+})
+</script>
+</body>
+</html>
