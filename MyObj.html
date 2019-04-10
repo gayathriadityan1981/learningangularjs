@@ -1,0 +1,22 @@
+<!Doctype html>
+<html>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <body ng-app="myObjApp">
+        <table ng-controller="myctrller">
+            <tr ng-repeat="(x,y) in myObj">
+                <td>{{x}}</td>
+                <td>{{y}}</td>
+            </tr>
+        </table>
+<script>
+    var app=angular.module("myObjApp",[]);
+    app.controller("myctrller",function($scope){
+$scope.myObj={
+    "Name":"Gayathri",
+    "Country":"India",
+    "State":"TamilNadu"
+}
+    });
+</script>
+    </body>
+</html>
