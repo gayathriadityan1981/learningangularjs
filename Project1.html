@@ -1,0 +1,57 @@
+<!Doctype html>
+<html ng-app="dropbox">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>DropBox</title>
+        <script src="https://code.angularjs.org/1.6.9/angular.js"></script>
+        <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudfare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular.min.js"></script> -->
+
+    </head>
+<body ng-controller="MainCtrl">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <a href="#" >
+                    <img class="logo" src="logo.png">
+                </a>
+                <ul class="nav nav-sidebar">
+                    <li ng-repeat="category in categories">
+                        <a href="#">{{category.name}}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <div ng-repeat="bookmark in bookmarks">
+                    <button type="button" class="close">&times;</button>
+                    <button type="button" class="btn btn-link">
+                        <span class="glyphicon "></span>
+
+                    </button>
+                    <a href="{{bookmark.url}}" target="_blank">{{bookmark.title}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    var app=angular.module("dropbox",[]);
+    app.controller("MainCtrl",function($scope){
+        $scope.categories=[
+            {"id":0,"name":"Development"},
+            {"id":1,"name":"Testing"},
+            {"id":2,"name":"Support"},
+            {"id":3,"name":"BPO"},
+        ]
+        $scope.bookmarks=[
+            {"id":0,"title":"Angular JS","url":"https://angularjs.org","category":"Development"},
+            {"id":1,"title":"Testing Links","url":"https://angularjs.org","category":"Development"},
+            {"id":2,"title":"Support Links","url":"https://angularjs.org","category":"Development"},
+            {"id":3,"title":"BPO Links","url":"https://angularjs.org","category":"Development"},
+        ]
+    })
+    </script>
+</body>
+</html>
