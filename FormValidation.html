@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <script src="https://code.angularjs.org/1.6.9/angular.min.js"></script>
+        <style>
+                input.ng-pristine {
+                    background-color:yellow;
+                }
+        
+                input.ng-touched.ng-invalid {
+                    background-color:red;
+                }
+        
+                input.ng-touched.ng-valid {
+                    background-color:green;
+                }
+                
+            </style>
+</head>
+<body ng-app >
+    <form name="studentForm" novalidate>
+            <p>
+                    First Name Status: <br />
+                    Pristine: {{studentForm.firstName.$pristine}} <br />
+                    Touched: {{studentForm.firstName.$touched}}<br />
+                    Untouched: {{studentForm.firstName.$untouched}}<br />
+                    Valid: {{studentForm.firstName.$valid}} <br />
+                    Invalid: {{studentForm.firstName.$invalid}} <br />
+                    Dirty: {{studentForm.firstName.$dirty}} <br />
+                    Error: {{studentForm.firstName.$error}} <br />
+                
+                </p>
+        <label for="firstname">First Name</label>
+        <input type="text" name="firstname" ng-model="student.firstname" ng-required><br/>
+        <span ng-show="studentForm.firstname.$touched && studentForm.firstname.$error.required">
+            First name is required</span><br/>
+        <label for="lastName">Last Name</label>
+         <input type="text" name="lastName" ng-minlength="3" ng-maxlength="5" ng-model="student.lastname"/><br/>
+        <span ng-show="studentForm.lastname.$touched && studentForm.lastname.$error.minlength">Mininum 3 chars.</span>
+        <span ng-show="studentForm.lastname.$touched && studentForm.lastname.$error.maxlength">Maximum 20 chars.</span><br/>
+        <label for="email">Email</label>
+        <input type="email" id="email" ng-model="student.email" name="email" /> <br/>
+        <span ng-show="studentForm.email.$touched && studentForm.email.$error.email">Please enter valid email id.</span><br/><br />
+    <input type="submit" value="Submit" />
+</form>
+</body>
+</html>
