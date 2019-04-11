@@ -1,0 +1,24 @@
+<! DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Event Registration</title>
+
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<body>
+<h3> Dependency Injection</h3>
+<div ng-app="mainApp" ng-controller="DemoController">
+    <p>Result is {{result}}</p>
+</div>
+<script>
+var app=angular.module("mainApp",[]);
+    app.service('AdditionService',function(){
+        this.addition=function(a,b){
+            return a+b;
+        }
+    });
+    app.controller("DemoController",function($scope,AdditionService){
+        $scope.result=AdditionService.addition(5,9);
+    })
+</script>
