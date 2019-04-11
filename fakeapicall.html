@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html >
+<head>
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+</head>
+<body ng-app="myApp">
+    <div ng-controller="myController">
+        <table border="1">
+            <tr>
+            <th>id</th>
+            <th>UserId</th>
+            <th>title</th>
+            <th>completed</th></tr>
+            <tr>
+                <td>{{data.data.id}}</td>
+                <td>{{data.data.userId}}</td>
+                <td>{{data.data.title}}</td>
+                <td>{{data.data.completed}}</td>                                                
+            </tr>
+        </table>   
+       
+    </div>
+    <script>
+        var myApp = angular.module('myApp', []);
+    
+        myApp.controller("myController", function ($scope, $http) {
+
+             var promise = $http.get("https://jsonplaceholder.typicode.com/todos/1")
+            .then(function(data){
+               
+                $scope.data=data;
+            })
+            .catch(function(data,status,headers,config){
+                $scope.errorMessage="could load data as the error is"+status;
+            });
+        });
+        </script>
+</body>
+</html>
+       
