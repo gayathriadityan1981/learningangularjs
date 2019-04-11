@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html >
+<head>
+        <script src="https://code.angularjs.org/1.6.9/angular.min.js"></script>
+</head>
+<body ng-app>
+    <div ng-init="person.DOB = 323234234898">
+        Default Date {{person.DOB | date}}<br/>
+        Default Date {{person.DOB | date:'short'}}<br/>
+        Default Date {{person.DOB | date:'longDate'}}<br/>
+        Default Date {{person.DOB | date:'yyyy'}}<br/>
+    </div>
+</body>
+</html>
