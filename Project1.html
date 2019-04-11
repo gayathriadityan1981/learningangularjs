@@ -1,57 +1,153 @@
 <!Doctype html>
-<html ng-app="dropbox">
+<html ng-app="myapp">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
-        <title>DropBox</title>
-        <script src="https://code.angularjs.org/1.6.9/angular.js"></script>
-        <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-        <script src="//cdnjs.cloudfare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular.min.js"></script> -->
-
+        <title>Project</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <script src="./app.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
     </head>
 <body ng-controller="MainCtrl">
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
-                <a href="#" >
-                    <img class="logo" src="logo.png">
-                </a>
+                <a href="#" ng-click="setCurrentCategory(null)" >
+                        <img class="logo" src="assets/img/logo.png">  </a>
                 <ul class="nav nav-sidebar">
-                    <li ng-repeat="category in categories">
-                        <a href="#">{{category.name}}</a>
+                        <li ng-repeat="category in categories" ng-class="{'active':isCurrentCategory(category)}">
+                                <a href="#" ng-click="setCurrentCategory(category)">{{category.name}}</a>
                     </li>
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                <div ng-repeat="bookmark in bookmarks">
-                    <button type="button" class="close">&times;</button>
-                    <button type="button" class="btn btn-link">
-                        <span class="glyphicon "></span>
-
+                    <div ng-class="{active: isSelectedBookmark(bookmark.id)}" ng-repeat="bookmark in bookmarks | filter:{category:currentCategory.name}">
+                            <button type="button" class="close">&times;</button>
+                            <button type="button" class="btn btn-link" ng-click="startEditing();" ><span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                            <a href="{{bookmark.url}}" target="_blank">{{bookmark.title}}</a>
+                        </div>
+                <hr/>
+                 <!-- CREATING -->
+                <div ng-if="shouldShowCreating()">
+                    <button type="button" class="btn btn-link" ng-click="startCreating();">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Create Bookmark
                     </button>
-                    <a href="{{bookmark.url}}" target="_blank">{{bookmark.title}}</a>
+                    <form class="create-form" ng-show="isCreating" role="form" ng-submit="createBookmark(newBookmark);" novalidate>
+                        <div class="form-group">
+                            <label for="newBookmarkTitle">Book Mark Title</label>
+                            <input type="text" class="form-control" id="newBookmarkTitle" ng-model="newBookmark.title" placeholder="Enter Title"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="newBookmarkURL">Book Mark URL</label>
+                            <input type="text" class="form-control" id="newBookmarkURL" ng-model="newBookmark.url" placeholder="Enter URL"/>
+                        </div>
+                        <button type="submit" class="btn btn-info btn-lg">Create</button>
+                        <button type="button" class="btn btn-default btn-lg pull-right" ng-click="cancelCreating()">Cancel</button>
+                    </form>
+                   
                 </div>
+                <hr/>
+                 <!-- EDITING -->
+                <div ng-if="shouldShowEditing()">
+                        Edit BookMark
+                        <button type="button" class="btn btn-default btn-lg pull-right" ng-click="cancelEditing()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            Cancel
+                        </button> 
+                </div>
+               
             </div>
         </div>
     </div>
-    <script>
-    var app=angular.module("dropbox",[]);
+<script>
+var app=angular.module("myapp",[]);
     app.controller("MainCtrl",function($scope){
         $scope.categories=[
-            {"id":0,"name":"Development"},
-            {"id":1,"name":"Testing"},
-            {"id":2,"name":"Support"},
-            {"id":3,"name":"BPO"},
-        ]
+            {"id":0,"name":"Books"},
+            {"id":1,"name":"Tutorials"},
+            {"id":2,"name":"Online Courses"}
+           
+        ],
         $scope.bookmarks=[
-            {"id":0,"title":"Angular JS","url":"https://angularjs.org","category":"Development"},
-            {"id":1,"title":"Testing Links","url":"https://angularjs.org","category":"Development"},
-            {"id":2,"title":"Support Links","url":"https://angularjs.org","category":"Development"},
-            {"id":3,"title":"BPO Links","url":"https://angularjs.org","category":"Development"},
-        ]
-    })
-    </script>
+            {"id":0,"title":"Buy Books Online","url":"https://amazon.com","category":"Books"},
+            {"id":1,"title":"Refer Tutorials","url":"https://tutorialpoint.com","category":"Tutorials"},
+            {"id":2,"title":"Enroll Online Courses","url":"https://w3schools.org","category":"Online Courses"}
+           
+        ];
+       
+       
+        //creating and editing states
+
+        $scope.isCreating=false;
+        $scope.isEditing=false;
+        $scope.currentCategory=null;
+
+         function setCurrentCategory(category){
+            $scope.currentCategory=category;
+            cancelCreating();
+            cancelEditing();
+        } 
+
+        function isCurrentCategory(category){
+            return $scope.currentCategory !== null && category.name === $scope.currentCategory.name;
+        }
+       
+        function startCreating(){
+            $scope.isCreating=true;
+            $scope.isEditing=false;
+            resetCreateForm();
+        }
+        function cancelCreating(){
+            $scope.isCreating=false;
+            
+        }
+        function startEditing(){
+            $scope.isCreating=false;
+            $scope.isEditing=true;
+        }
+        function cancelEditing(){
+            $scope.isEditing=false;
+            $scope.editedBookmark = null;    
+        }
+
+        function shouldShowCreating(){
+            return $scope.currentCategory && !$scope.isEditing;
+        }
+        function shouldShowEditing(){
+            return $scope.isEditing && !$scope.isCreating;
+        }
+        $scope.setCurrentCategory=setCurrentCategory;
+        $scope.isCurrentCategory=isCurrentCategory;
+        $scope.startCreating=startCreating;
+        $scope.startEditing=startEditing;
+        $scope.cancelEditing=cancelEditing;
+        $scope.cancelCreating=cancelCreating;
+        $scope.shouldShowCreating=shouldShowCreating;
+        $scope.shouldShowEditing=shouldShowEditing;
+
+        //CRUD Operations
+
+        function resetCreateForm(){
+            $scope.newBookMark={
+                title:'',
+                url:'',
+                category:$scope.currentCategory.name
+           }
+        }
+        function createBookmark(bookmark){
+            console.log("-----1----------"+bookmark.title)
+            bookmark.id=$scope.bookmarks.length;
+            $scope.bookmarks.push(bookmark);
+            console.log("-----2----------"+ $scope.bookmarks)
+            resetCreateForm();
+        }
+        $scope.createBookmark=createBookmark;
+        $scope.resetCreateForm=resetCreateForm;
+    })</script>
+
 </body>
 </html>
